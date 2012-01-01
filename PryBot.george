@@ -1,0 +1,9 @@
+[:settings]
+nick: buttslave
+channels: |#pry|
+server: irc.freenode.net
+port: 6667
+
+[:messages]
+
+
