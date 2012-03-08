@@ -9,7 +9,7 @@ class MessageServicePlugin
 
   def initialize *args
     super *args
-    @messages = K[:messages]
+    @messages = K[:messages] || {}
   end
 
 

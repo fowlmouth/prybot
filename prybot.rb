@@ -1,14 +1,16 @@
 #!/usr/bin/env ruby
 require 'cinch'
 require 'pry'
-require 'george'
+#require 'george'
 #require 'urban_api'
 require 'htmlentities'
 require 'mechanize'
 
 PREFIX = /^\./
 
-$:<<'.'
+dir = File.dirname(File.expand_path(__FILE__))
+Dir.chdir dir
+$:<< dir
 require './plugins/google'
 #require './plugins/babble'
 require './plugins/urban_dict'
@@ -25,9 +27,10 @@ $mcfile = File.expand_path('./plugins/log.txt')
 MC = MarkovChain.new(File.read($mcfile))
 MC.track_new_shit
 A = Mechanize.new
-K = George.new(
-  './PryBot.george',
-  read_only: false)
+#K = George.new(
+#  './PryBot.george',
+#  read_only: false)
+K = YAML.load_file(File.expand_path('./PryBot.yaml'))
 D = HTMLEntities.new
 #U = UrbanAPI.new
 
