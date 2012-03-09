@@ -1,5 +1,4 @@
 
-require 'htmlentities'
 class MarkovChain
   attr_reader :words
   
@@ -77,20 +76,22 @@ class MarkovPlugin
   match /^\.mc-save/, method: :mc_save, use_prefix: false
 
   def om_nom_nom m, s
-    if s =~ /^#{bot.nick}:/
+    if s =~ /^#{bot.nick}(,|:)/
       puts 'I should babel...'
-      m.reply sentence('I', 3)
+      m.reply MC.chat
     else
       puts "Adding text: #{s}"
-      MC.digest_text(s)
+      MC.add_sentence s
     end
   end
 
 def mc_save m
+  MC.background_save
+  (m.reply "Database saved, log unchanged"; return) unless $new_lines
   File.open($mcfile, 'a') do |f|
-    f.puts MC.new_lines.join("\n")
+    f.puts $new_lines.join("\n")
   end
-  MC.clear_new_lines
+  $new_lines = []
   m.reply "File saved, #{mc_fsize}"
 end
 
