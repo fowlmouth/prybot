@@ -107,7 +107,7 @@ def mc_fsize
 end
 
   def mc_info m
-    m.reply MC.inspect
+    m.reply MC.nw.size
   end
 
 def sentence word='I', size=1
