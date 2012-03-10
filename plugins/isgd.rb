@@ -3,7 +3,7 @@ require 'uri'
 
 class IsgdLink
   include Cinch::Plugin
-  prefix PREFIX
+  set :prefix, PREFIX
   match /isgd (\S+)/, method: :isdg
   match /tinyurl (\S+)/, method: :isgd
   match /shorten (\S+)/, method: :isgd

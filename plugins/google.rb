@@ -5,7 +5,8 @@ require 'cgi'
 
 class Google
   include Cinch::Plugin
-  prefix PREFIX
+
+  set :prefix, PREFIX
   match /google (.+)/, method: :searchc
   match /time (.+)/, method: :gtimec
 

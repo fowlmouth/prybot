@@ -3,7 +3,7 @@ class MessageServicePlugin
   MESSAGE_LIMIT = 2
   include Cinch::Plugin
   listen_to :message
-  prefix PREFIX
+  set :prefix, PREFIX
   match /tell ([^\s]+) (.+)/, method: :execute
   match /messages?/, method: :info
 

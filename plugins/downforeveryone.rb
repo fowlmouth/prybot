@@ -3,7 +3,7 @@ require 'open-uri'
 
 class DownForEveryonePlugin
   include Cinch::Plugin
-  prefix PREFIX
+  set :prefix, PREFIX
   match /status (.+)/
 
   def status site = nil

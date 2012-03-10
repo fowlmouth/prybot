@@ -6,7 +6,7 @@ require 'cgi'
 class UrbanDictionary
   include Cinch::Plugin
 
-  prefix PREFIX
+  set :prefix, PREFIX
   match /urban (.+)/
   def lookup(word)
     url = "http://www.urbandictionary.com/define.php?term=#{CGI.escape(word)}"

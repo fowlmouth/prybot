@@ -2,7 +2,7 @@ require 'twitter'
 
 class TwitterPlugin
   include Cinch::Plugin
-  prefix PREFIX
+  set :prefix, PREFIX
   match /tw (.+)/, method: :twit
   match /twn (\d+) (.+)/, method: :twitn
   match /twl ([A-Za-z]{2}) (.+)/, method: :twitl

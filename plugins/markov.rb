@@ -79,7 +79,7 @@ class MarkovPlugin
     if s =~ /^#{bot.nick}(,|:)/
       puts 'I should babel...'
       m.reply MC.chat
-    else
+    elseif s !~ /^./
       puts "Adding text: #{s}"
       MC.add_sentence s
     end
