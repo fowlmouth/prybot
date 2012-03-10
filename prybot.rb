@@ -13,7 +13,7 @@ $: << "#{dir}/plugins"
 %w[
   google urban_dict twitter
   downforeveryone messageservice
-  markovchat markov isgd].each {|f|
+  markovchat markov isgd nickchange].each {|f|
   require "./plugins/#{f}"
 }
 
@@ -49,7 +49,7 @@ bot = Cinch::Bot.new do
     c.channels = K[:settings][:channels]
     c.nick = K[:settings][:nick]
     c.plugins.plugins = [
-      Google, UrbanDictionary, IsgdLink, #BabblePlugin,
+      Google, UrbanDictionary, IsgdLink, NickChangePlugin, #BabblePlugin,
       TwitterPlugin, DownForEveryonePlugin, MessageServicePlugin, MarkovPlugin]
   end
   

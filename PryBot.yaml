@@ -2,6 +2,7 @@
   :nick: buttslave
   :channels:
     - "#pry"
+#    - "#cinch-bots"
   :server: irc.freenode.net
   :port: 6667
 :messages:

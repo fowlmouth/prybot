@@ -6,13 +6,7 @@ class TwitterPlugin
   match /tw (.+)/, method: :twit
   match /twn (\d+) (.+)/, method: :twitn
   match /twl ([A-Za-z]{2}) (.+)/, method: :twitl
-  match /nick (\S+)/, method: :changenick
 
-  def changenick(m, n)
-    if bot.nick = n
-      m.reply "Do you even think about all the lives you've ruined? Do you even care?"
-    end
-  end
 
   def twitter s, opts = {}
     Twitter.search(s, {result_type: 'recent'}.merge(opts)).map do |r|
