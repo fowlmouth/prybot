@@ -27,7 +27,9 @@ if !File.exists?('markov-pry.db') \
 && File.exists?($mcfile) \
 && File.size($mcfile) > 0 #overkill?
   puts 'Building markov chain out of ' << $mcfile
-  File.readlines($mcfile).each { |l| MC.add_sentence(l) }
+  File.readlines($mcfile).each { |l| MC.add_sentence(l.chomp) }
+  MC.save
+  exit
 end
 
 #MC = MarkovChain.new(File.read($mcfile))
@@ -79,7 +81,7 @@ ensure
   MC.save #e
   File.open($mcfile, 'a') do |f| #a
     f.puts $new_lines.join("\n") #t
-  end if $new_lines #m
+  end if ($new_lines && $new_lines.size > 0) #m
 end #e
 
 puts 'thanks for playing'

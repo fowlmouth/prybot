@@ -1,4 +1,4 @@
-
+=begin
 class MarkovChain
   attr_reader :words
   
@@ -57,7 +57,7 @@ class MarkovChain
       add(word, sentence[index+1]) if index <= sentence.size-2
     end
   end
-=begin  
+#=begin  
   def add_rss feed = 'http://rss.cnn.com/rss/money_news_economy.rss'
     rss = SimpleRSS.parse open(feed)
     rss.entries.each do |e| 
@@ -66,8 +66,9 @@ class MarkovChain
     end
     true
   end
-=end
+#=end
 end
+=end
 
 class MarkovPlugin
   include Cinch::Plugin
