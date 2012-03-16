@@ -11,9 +11,9 @@ dir = File.dirname(File.expand_path(__FILE__))
 Dir.chdir dir
 $: << "#{dir}/plugins"
 %w[
-  google urban_dict twitter
-  downforeveryone messageservice
-  markovchat markov isgd nickchange].each {|f|
+  google.cinch2 urban_dict.cinch2 twitter.cinch2
+  downforeveryone.cinch2 messageservice.cinch2
+  markovchat markov.cinch2 isgd.cinch2 nickchange.cinch2].each {|f|
   require "./plugins/#{f}"
 }
 
@@ -31,6 +31,8 @@ if !File.exists?('markov-pry.db') \
   MC.save
   exit
 end
+
+MC.load
 
 #MC = MarkovChain.new(File.read($mcfile))
 #MC.track_new_shit
