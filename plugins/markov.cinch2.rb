@@ -1,3 +1,77 @@
+require 'markovchat'
+
+class MarkovPlugin
+  include Cinch::Plugin
+  match /(.*)/, method: :om_nom_nom, use_prefix: false
+  match /^\.mc-info/, method: :mc_info, use_prefix: false
+  match /^\.mc-save/, method: :mc_save, use_prefix: false
+
+  def om_nom_nom m, s
+    if s =~ /^#{bot.nick}(,|:)/
+      puts 'I should babel...'
+      m.reply MC.chat
+    elsif m.user.nick == 'pookie'
+      if $track_links
+        $track_links << s
+      end
+      #m.reply 'Thanks pookie for your wonderful contribution'
+    elsif s !~ /^./
+      puts "Adding text: #{s}"
+      if $track_links
+        links = s.scan /https?\:\/\/\S+/
+        unless links.empty?
+          links.each { |l|
+            $track_links << l
+            s.gsub! l, ''
+          }
+        end
+        m.reply links.join(' ')
+      end
+      MC.add_sentence(s) unless s.empty?
+    end
+  end
+
+  def mc_save m
+    MC.background_save
+    links_saved = 0
+    (File.open('./data/links', 'a') do |f|
+      f.puts $track_links.join("\n")
+    end; links_saved = $track_links.size; $track_links = []) if $track_links
+    (m.reply "Database saved, log unchanged"; return) unless $new_lines
+    File.open($mcfile, 'a') do |f|
+      f.puts $new_lines.join("\n")
+    end
+    $new_lines = []
+    m.reply "File saved, #{mc_fsize}, saved #{links_saved} links"
+  end
+
+  def mc_fsize
+    s = File.size $mcfile
+    if s < 1024
+      "#{s} KB"
+    elsif s < 1024**2
+      "#{((s*1.0)/(1024**2)).round(2)} MB"
+    elsif s < 1024**3
+      "#{((s*1.0)/(1024**3)).round(2)} GB"
+    end
+  end
+
+  def mc_info m
+    m.reply MC.nw.size
+  end
+
+  def sentence word='I', size=1
+    sentence = ''
+    word = MC.random_word if word.nil? || MC.get(word).nil?
+    until sentence.count('.') == size || sentence.size > 420 
+      sentence << word << ' '
+      word = MC.get(word)
+    end
+    sentence
+  end
+
+end
+
 =begin
 class MarkovChain
   attr_reader :words
@@ -69,59 +143,4 @@ class MarkovChain
 #=end
 end
 =end
-
-require 'markovchat'
-
-class MarkovPlugin
-  include Cinch::Plugin
-  match /(.*)/, method: :om_nom_nom, use_prefix: false
-  match /^\.mc-info/, method: :mc_info, use_prefix: false
-  match /^\.mc-save/, method: :mc_save, use_prefix: false
-
-  def om_nom_nom m, s
-    if s =~ /^#{bot.nick}(,|:)/
-      puts 'I should babel...'
-      m.reply MC.chat
-    elseif s !~ /^./
-      puts "Adding text: #{s}"
-      MC.add_sentence s
-    end
-  end
-
-def mc_save m
-  MC.background_save
-  (m.reply "Database saved, log unchanged"; return) unless $new_lines
-  File.open($mcfile, 'a') do |f|
-    f.puts $new_lines.join("\n")
-  end
-  $new_lines = []
-  m.reply "File saved, #{mc_fsize}"
-end
-
-def mc_fsize
-  s = File.size $mcfile
-  if s < 1024
-    "#{s} KB"
-  elsif s < 1024**2
-    "#{((s*1.0)/(1024**2)).round(2)} MB"
-  elsif s < 1024**3
-    "#{((s*1.0)/(1024**3)).round(2)} GB"
-  end
-end
-
-  def mc_info m
-    m.reply MC.nw.size
-  end
-
-def sentence word='I', size=1
-  sentence = ''
-  word = MC.random_word if word.nil? || MC.get(word).nil?
-  until sentence.count('.') == size || sentence.size > 420 
-    sentence << word << ' '
-    word = MC.get(word)
-  end
-  sentence
-end
-
-end
 
