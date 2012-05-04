@@ -5,6 +5,12 @@ require 'yaml'
 require 'htmlentities'
 require 'mechanize'
 
+begin
+  require 'lulzcatz'
+rescue LoadError
+  puts %q{I won't be lulzin it up for you}
+end
+
 PREFIX = /^\./
 
 dir = File.dirname(File.expand_path(__FILE__))
@@ -14,7 +20,7 @@ require 'markovchat'
 %w[
   google urban_dict twitter
   downforeveryone messageservice
-  markov isgd nickchange].each {|f|
+  markov isgd nickchange gemsearch].each {|f|
   require "#{f}.cinch2"
 }
 
@@ -49,7 +55,7 @@ bot = Cinch::Bot.new do
     c.channels = K[:settings][:channels]
     c.nick = K[:settings][:nick]
     c.plugins.plugins = [
-      Google, UrbanDictionary, IsgdLink, NickChangePlugin,
+      Google, UrbanDictionary, IsgdLink, NickChangePlugin, GemSearch,
       TwitterPlugin, DownForEveryonePlugin, MessageServicePlugin, MarkovPlugin]
   end
   

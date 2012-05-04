@@ -25,9 +25,10 @@ class MarkovPlugin
             s.gsub! l, ''
           }
         end
-        m.reply links.join(' ')
+        puts links.join(' ')
       end
       MC.add_sentence(s) unless s.empty?
+      m.reply(MC.chat.to_lol) if s =~ /lulz/ && String.method_defined?(:to_lol)
     end
   end
 
