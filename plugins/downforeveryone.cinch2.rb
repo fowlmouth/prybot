@@ -1,6 +1,7 @@
 require 'nokogiri'
 require 'open-uri'
 
+module Prugins
 class DownForEveryonePlugin
   include Cinch::Plugin
   set :prefix, PREFIX
@@ -23,3 +24,5 @@ class DownForEveryonePlugin
     m.reply status(site)
   end
 end
+end
+

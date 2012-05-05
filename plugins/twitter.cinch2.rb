@@ -1,5 +1,5 @@
 require 'twitter'
-
+module Prugins
 class TwitterPlugin
   include Cinch::Plugin
   set :prefix, PREFIX
@@ -28,4 +28,5 @@ class TwitterPlugin
   def twitl(m, lang, word)
     m.reply(twitter(word, rpp: 3, lang: lang) || "No results found")
   end
+end
 end

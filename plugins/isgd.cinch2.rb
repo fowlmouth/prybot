@@ -1,6 +1,7 @@
 require 'net/http'
 require 'uri'
 
+module Prugins
 class IsgdLink
   include Cinch::Plugin
   set :prefix, PREFIX
@@ -11,6 +12,8 @@ class IsgdLink
 
   def isgd(m, word)
     res = Net::HTTP.get_response URI.parse(ISGD % D.encode(word))
-    res && res.code == '200' && m.reply("#{m.user.nick}: #{res.body} -> #{word}")
+    res && res.code == '200' && m.reply("#{m.user.nick}: #{res.body}")
   end
 end
+end
+

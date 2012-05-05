@@ -1,4 +1,4 @@
-
+module Prugins
 class MessageServicePlugin
   MESSAGE_LIMIT = 2
   include Cinch::Plugin
@@ -40,3 +40,5 @@ class MessageServicePlugin
     end
   end
 end
+end
+

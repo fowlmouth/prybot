@@ -3,6 +3,7 @@ require 'open-uri'
 require 'nokogiri'
 require 'cgi'
 
+module Prugins
 class Google
   include Cinch::Plugin
 
@@ -41,4 +42,4 @@ class Google
     m.reply(search(query))
   end
 end
-
+end

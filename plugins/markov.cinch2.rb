@@ -1,5 +1,6 @@
 require 'markovchat'
 
+module Prugins
 class MarkovPlugin
   include Cinch::Plugin
   match /(.*)/, method: :om_nom_nom, use_prefix: false
@@ -70,7 +71,7 @@ class MarkovPlugin
     end
     sentence
   end
-
+end
 end
 
 =begin

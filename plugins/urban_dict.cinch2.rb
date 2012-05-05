@@ -2,7 +2,7 @@ require 'cinch'
 require 'open-uri'
 require 'nokogiri'
 require 'cgi'
-
+module Prugins
 class UrbanDictionary
   include Cinch::Plugin
 
@@ -17,3 +17,5 @@ class UrbanDictionary
     m.reply(lookup(word) || "No results found", true)
   end
 end
+end
+

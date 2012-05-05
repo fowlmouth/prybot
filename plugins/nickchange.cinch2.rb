@@ -1,4 +1,4 @@
-
+module Prugins
 class NickChangePlugin
   include Cinch::Plugin
   set :prefix, PREFIX
@@ -32,3 +32,5 @@ class NickChangePlugin
   
   def random_nick() (0..8).map { rand(65..90).chr }.join'' end
 end
+end
+
