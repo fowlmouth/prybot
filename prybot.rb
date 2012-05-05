@@ -11,18 +11,13 @@ rescue LoadError
   puts %q{I won't be lulzin it up for you}
 end
 
+#chat command prefix
 PREFIX = /^\./
 
 dir = File.dirname(File.expand_path(__FILE__))
 Dir.chdir dir
 $: << "#{dir}/plugins"
-require 'markovchat'
-%w[
-  google urban_dict twitter
-  downforeveryone messageservice
-  markov isgd nickchange gemsearch].each {|f|
-  require "#{f}.cinch2"
-}
+Dir.chdir 'plugins' do Dir.glob '*.cinch2.rb', &method(:require) end
 
 #file is not read unless the database doesn't exist
 $mcfile = File.expand_path('./data/log.txt')
@@ -54,9 +49,7 @@ bot = Cinch::Bot.new do
     c.port = K[:settings][:port]
     c.channels = K[:settings][:channels]
     c.nick = K[:settings][:nick]
-    c.plugins.plugins = [
-      Google, UrbanDictionary, IsgdLink, NickChangePlugin, GemSearch,
-      TwitterPlugin, DownForEveryonePlugin, MessageServicePlugin, MarkovPlugin]
+    c.plugins.plugins = Prugins.constants.map &Prugins.method(:const_get)
   end
   
   on :message, /^#{self.nick}: help(?:\?)?/ do |m|
