@@ -2,6 +2,7 @@ require 'cinch'
 require 'open-uri'
 require 'nokogiri'
 require 'cgi'
+require'json'
 
 module Prugins
 class Google
@@ -10,6 +11,7 @@ class Google
   set :prefix, PREFIX
   match /google (.+)/, method: :searchc
   match /time (.+)/, method: :gtimec
+  match /suggest (.+)/, method: :"epitron^_^"
 
   def gtime s
     res = ''
@@ -40,6 +42,16 @@ class Google
 
   def searchc(m, query)
     m.reply(search(query))
+  end
+
+  define_method :"epitron^_^" do |m, query|
+    begin
+      res = JSON(open('http://suggestqueries.google.com/complete/search?client=firefox&q='+(URI.encode query), &:read)).last
+      if res.empty? then m.reply 'I\'m all out of suggestions.'
+      else m.reply res.join(' | ') end
+    rescue => e
+      m.reply 'Something bad happened: ' << e.class.to_s << ': ' << e.message
+    end 
   end
 end
 end
