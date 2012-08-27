@@ -1,5 +1,6 @@
+=begin
 require'google_translate'
-
+module INACTIVATIZED
 module Prugins
 class GoogleTranslate
   include Cinch::Plugin
@@ -11,3 +12,5 @@ class GoogleTranslate
   end
 end
 end
+end
+=end

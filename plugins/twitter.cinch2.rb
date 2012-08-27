@@ -9,7 +9,7 @@ class TwitterPlugin
 
 
   def twitter s, opts = {}
-    Twitter.search(s, {result_type: 'recent'}.merge(opts)).map do |r|
+    Twitter.search(s, {result_type: 'recent'}.merge(opts)).collection.map do |r|
 #    res = Twitter::Search.new.containing(s).result_type(:recent).per_page(n).map do |r|
       D.decode "#{r.from_user}: #{r.text}".gsub(/(?:\s|<br\/>|<br \/>|<br>)+/,' ')
     end.join('; ')

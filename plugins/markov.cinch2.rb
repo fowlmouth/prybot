@@ -1,4 +1,10 @@
-require 'markovchat'
+#require 'markovchat'
+
+class String
+  def random_word
+    self.scan(/\w+/).sample
+  end
+end
 
 module Prugins
 class MarkovPlugin
@@ -7,31 +13,33 @@ class MarkovPlugin
   match /^\.mc-info/, method: :mc_info, use_prefix: false
   match /^\.mc-save/, method: :mc_save, use_prefix: false
 
+  SentenceSizes = [1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 4, 4, 5]
   def om_nom_nom m, s
     if s =~ /^#{bot.nick}(,|:)/
       puts 'I should babel...'
-      m.reply MC.chat
+      m.reply sentence($'.random_word, SentenceSizes.sample) ##MC.chat
     elsif m.user.nick == 'pookie'
       if $track_links
         $track_links << s
       end
       #m.reply 'Thanks pookie for your wonderful contribution'
-    elsif s !~ /^./
+    elsif s !~ PREFIX
       puts "Adding text: #{s}"
-      if $track_links
-        links = s.scan /https?\:\/\/\S+/
-        unless links.empty?
-          links.each { |l|
-            $track_links << l
-            s.gsub! l, ''
-          }
-        end
-        puts links.join(' ')
-      end
-      MC.add_sentence(s) unless s.empty?
-      m.reply(MC.chat.to_lol) if s =~ /lulz/ && String.method_defined?(:to_lol)
+      s.gsub! /\02/, '' #kill color codes
+      scrubbed = s.dup
+      scrubbed.scan(/[hf]t+ps?\:\/\/\S+/).each { |l|
+        $track_links << l if $track_links
+        scrubbed.gsub! l, ''
+      }
+      scrubbed.gsub! /^\S+[:,]\s+/, '' #kill message targets
+      ($new_lines << s; MC.add_sentence(scrubbed)) unless s.empty?
+      lulzy(m, s)
+      ##m.reply(sentence(s.random_word).to_lol) if s =~ /lulz/ && String.method_defined?(:to_lol)
     end
   end
+
+  #overwritten below
+  def lulzy(*) end
 
   def mc_save m
     MC.background_save
@@ -62,10 +70,18 @@ class MarkovPlugin
     m.reply MC.nw.size
   end
 
-  def sentence word='I', size=1
+  def sentence word='I', size=1, maxsize=420
+    puts("sentence(#{word}, #{size})")
     sentence = ''
     word = MC.random_word if word.nil? || MC.get(word).nil?
-    until sentence.count('.') == size || sentence.size > 420 
+    tries = 0
+    until sentence.count('.') == size || sentence.size > maxsize 
+      ( word = MC.random_word
+        tries += 1          ) \
+        until word != nil || tries > 20
+      if tries > 20 then
+        puts "Expended tries..."
+      end
       sentence << word << ' '
       word = MC.get(word)
     end
@@ -74,7 +90,6 @@ class MarkovPlugin
 end
 end
 
-=begin
 class MarkovChain
   attr_reader :words
   
@@ -133,7 +148,11 @@ class MarkovChain
       add(word, sentence[index+1]) if index <= sentence.size-2
     end
   end
-#=begin  
+
+  def save(*) nil end
+  alias background_save save
+  alias load save
+=begin  
   def add_rss feed = 'http://rss.cnn.com/rss/money_news_economy.rss'
     rss = SimpleRSS.parse open(feed)
     rss.entries.each do |e| 
@@ -142,7 +161,20 @@ class MarkovChain
     end
     true
   end
-#=end
-end
 =end
+end
 
+begin
+  require'lulzcatz'
+rescue LoadError
+  nil
+end
+
+if String.method_defined? :to_lol
+  Prugins::MarkovPlugin.class_eval do 
+    def lulzy(m, sent)
+      m.reply(sentence(sent.random_word, 1, 15).to_lol) \
+        if sent =~ /lulz/i
+    end
+  end
+end
