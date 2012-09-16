@@ -42,7 +42,7 @@ bot = Cinch::Bot.new do
     c.server = K.server
     c.port = K.port
     c.channels = K.channels
-    c.nick = "CIA-#{500 + rand(500)}" #K[:settings][:nick]
+    c.nick = "ClA-75" #{500 + rand(500)}" #K[:settings][:nick]
     c.plugins.plugins = Prugins.constants.map &Prugins.method(:const_get)
   end
   

@@ -10,7 +10,12 @@ class UrbanDictionary
   match /urban (.+)/
   def lookup(word)
     url = "http://www.urbandictionary.com/define.php?term=#{CGI.escape(word)}"
-    CGI.unescape_html Nokogiri::HTML(open(url)).at("div.definition").text.gsub(/\s+/, ' ') rescue nil
+    res = CGI.unescape_html Nokogiri::HTML(open(url)).at("div.definition").text.gsub(/\s+/, ' ') rescue ''
+    if res.size < 300
+      res
+    else
+      res[0,300] << '... ' << url
+    end
   end
 
   def execute(m, word)

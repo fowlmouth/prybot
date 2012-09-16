@@ -1,8 +1,8 @@
-
+module Prugins
 class DuckDuckGoPlugin
 include Cinch::Plugin
-set :prefix, '.'
-match /^\.ddg (.*)/
+set :prefix, PREFIX
+match /ddg (.*)/
 
 def execute(m, *)
 m.reply "apparently i stopped half way through writing the duckduckgo plugin"
@@ -12,4 +12,5 @@ end
 res = Net::HTTP.get_response URI.parse(s)
 res &&= JSON.parse(res.body)
 =end
+end
 end
